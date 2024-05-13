@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добавление отзыва</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="header">
+        <a href="./revievList.html">Просмотреть все отзывы</a>
+        <h1>Страница добавления отзыва</h1>
+    </div>
+    <div class="main">
+        <div class="forms">
+            <form id="reviewForm">
+                <div class="form_productName">
+                    <label for="productName">Название продукта:</label>
+                    <input type="text" id="productName" name="productName">
+                </div>
+                <div>
+                    <label for="reviewText">Текст отзыва:</label>
+                    <textarea id="reviewText" name="reviewText"></textarea>
+                </div>
+                <button type="submit" onclick="saveReview()">Добавить отзыв</button>
+            </form>
+        </div>
+    <div class="allproducts">
+        <h2>Все наши продукты:</h2>
+            <ul>
+                <li>Ноутбук XYZ-2000</li>
+                <li>Смартфон SuperGadget X</li>
+                <li>Умные часы SmartTime 500</li>
+                <li>Планшет TabMaster 10</li>
+                <li>Камера ActionShot Pro</li>
+                <li>Наушники SoundWave 3000</li>
+                <li>Фитнес-браслет FitTrack 100</li>
+                <li>VR-очки VirtualXperience</li>
+                <li>Умный домашний помощник HomeAssist 500</li>
+                <li>Электрический самокат EcoRide 200</li>
+            </ul>
+    </div>
+    </div>
+
+    <script>
+
+        function saveReview() {
+            const productName = document.getElementById('productName').value;
+            const reviewText = document.getElementById('reviewText').value;
+    
+            const allReviews = JSON.parse(localStorage.getItem('reviews')) || [];
+            allReviews.push({ productName, reviewText });
+            localStorage.setItem('reviews', JSON.stringify(allReviews));
+    
+            const ul = document.querySelector('.allproducts ul');
+            if (![...ul.children].some(li => li.textContent === productName)) {
+                const li = document.createElement('li');
+                li.textContent = productName;
+                li.addEventListener('click', function() {
+                    document.getElementById('productName').value = this.textContent;
+                });
+                ul.appendChild(li);
+            }
+        }
+    
+        const ul = document.querySelector('.allproducts ul');
+        const savedReviews = JSON.parse(localStorage.getItem('reviews')) || [];
+        savedReviews.forEach(review => {
+            if (![...ul.children].some(li => li.textContent === review.productName)) {
+                const li = document.createElement('li');
+                li.textContent = review.productName;
+                li.addEventListener('click', function() {
+                    document.getElementById('productName').value = this.textContent; 
+                });
+                ul.appendChild(li);
+            }
+        });
+    </script>
+ 
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Просмотр отзывов</title>
+</head>
+<body>
+    <div class="header">
+        <a href="./index.html">Страница добавления отзыва</a>
+        <h1>Страница просмотра отзывов</h1>
+    </div>
+    <div id="productList">
+        <!-- Список всех продуктов с отзывами -->
+    </div>
+
+    <div id="reviewList">
+        <!-- Список отзывов по выбранному продукту -->
+    </div>
+
+    <script>
+        function showReviews(productName) {
+            const reviewList = document.getElementById('reviewList');
+            reviewList.innerHTML = ''; 
+    
+            const productTitle = document.createElement('h2');
+            productTitle.textContent = `Отзывы по продукту: ${productName}`;
+            reviewList.appendChild(productTitle);
+    
+            const savedReviews = JSON.parse(localStorage.getItem('reviews')) || [];
+            savedReviews.forEach((review, index) => {
+                if (review.productName === productName) {
+                    const div = document.createElement('div');
+                    div.textContent = review.reviewText;
+    
+                    const deleteButton = document.createElement('button');
+                    deleteButton.textContent = 'Удалить отзыв';
+                    deleteButton.addEventListener('click', () => {
+                        savedReviews.splice(index, 1);
+                        localStorage.setItem('reviews', JSON.stringify(savedReviews)); 
+                        showReviews(productName);
+                    });
+    
+                    div.appendChild(deleteButton);
+                    reviewList.appendChild(div);
+                }
+            });
+        }
+    
+        const productList = document.getElementById('productList');
+        const savedReviews = JSON.parse(localStorage.getItem('reviews')) || [];
+        const productsWithReviews = [...new Set(savedReviews.map(review => review.productName))];
+        productsWithReviews.forEach(productName => {
+            const productDiv = document.createElement('div');
+            productDiv.textContent = productName;
+            productDiv.addEventListener('click', () => {
+                showReviews(productName); 
+            });
+            productList.appendChild(productDiv);
+        });
+    </script>
+    
+    
+</body>
+</html>
